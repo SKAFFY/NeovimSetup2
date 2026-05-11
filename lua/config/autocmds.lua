@@ -1,8 +1,22 @@
--- Autocmds are automatically loaded on the VeryLazy event
--- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
---
--- Add any additional autocmds here
--- with `vim.api.nvim_create_autocmd`
---
--- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
--- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
+vim.api.nvim_create_autocmd("User", {
+  pattern = "TinyGoDone",
+  callback = function()
+    local ok, tinygo = pcall(require, "tinygo")
+    if ok and tinygo.currentTarget == "original" then
+      vim.lsp.enable('gopls', false)
+      vim.lsp.stop_client(vim.lsp.get_clients({ name = "gopls" }), true)
+      vim.lsp.enable('gopls', true)
+    else
+      vim.cmd("LspRestart gopls")
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    local ok, tinygo = pcall(require, "tinygo")
+    if ok and tinygo.currentTarget and tinygo.currentTarget ~= "original" then
+      tinygo.setTarget({ fargs = { "original" } })
+    end
+  end,
+})
