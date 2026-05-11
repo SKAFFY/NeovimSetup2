@@ -1,6 +1,7 @@
 return {
   {
     "stevearc/conform.nvim",
+    enabled = false, -- Отключено: форматирование обрабатывается go.nvim
     opts = function(_, opts)
       -- Дополняем существующие настройки форматирования
       opts.formatters_by_ft = opts.formatters_by_ft or {}

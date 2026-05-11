@@ -1,3 +1,12 @@
+-- Добавить GOPATH/bin в PATH для golangci-lint и других инструментов
+local go_bin = vim.fn.system({ "go", "env", "GOPATH" })
+if go_bin ~= "" then
+  go_bin = go_bin:gsub("\n", "") .. "/bin"
+  if vim.fn.isdirectory(go_bin) == 1 then
+    vim.env.PATH = go_bin .. ":" .. vim.env.PATH
+  end
+end
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"

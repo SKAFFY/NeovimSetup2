@@ -13,16 +13,28 @@ return {
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
 
-      -- Добавляем подсветку для интерфейсов и методов
-      -- Остальное LazyVim уже умеет подсвечивать
+      -- Подсветка для интерфейсов и их реализаций
       vim.treesitter.query.set_query(
         "go",
         "highlights",
         [[
-        (interface_type) @interface
-        (method_spec) @method
-        (method_declaration) @method
-      ]]
+          (interface_type) @interface
+          (type_spec name: (identifier) @type.interface)
+          (method_spec) @method
+          (method_declaration) @method
+          (field_declaration name: (field_identifier) @field)
+          (parameter_declaration name: (identifier) @parameter)
+        ]]
+      )
+
+      -- Подсветка для связей "implements" (через Treesitter captures)
+      vim.treesitter.query.set_query(
+        "go",
+        "locals",
+        [[
+          (interface_type) @definition.interface
+          (type_spec name: (identifier) @definition.type)
+        ]]
       )
     end,
   },

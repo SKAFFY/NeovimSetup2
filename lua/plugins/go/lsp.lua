@@ -13,21 +13,26 @@ return {
               shadow = true,
               nilness = true,
               unusedwrite = true,
+              implemented = true, -- Показывает, реализует ли структура интерфейс
             },
             completeUnimported = true,
             deepCompletion = true,
             staticcheck = true,
             gofumpt = true,
+            -- Inlay hints для лучшей навигации
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              compositeLiteralTypes = true,
+              constantValues = true,
+              functionTypeParameters = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
+            },
           },
         },
       }
 
-      -- Добавляем горячие клавиши для LSP (используем правильный метод)
-      local keys = require("lazyvim.plugins.lsp.keymaps").get()
-      vim.list_extend(keys, {
-        { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
-        { "<leader>gI", vim.lsp.buf.type_definition, desc = "Type Definition" },
-      })
       return opts
     end,
   },
